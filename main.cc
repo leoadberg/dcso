@@ -13,11 +13,17 @@ int main() {
 
   prog->decl("it", VarType::REG, 4);
 
-  // prog->add(Assign("z", Cat(V(prog, "it"), Int(0, 2)), prog->vm()));
+  /*
+  if (it == 1) {
+    z = y | (y & x)
+  } else {
+    z = (x + 1) - 1
+  }
+  */
   prog->IF(EQ(V(prog, "it"), Int(1, 4), prog->vm()));
-    prog->add(Assign("z", Int(3, 2), prog->vm()));
+    prog->add(Assign("z", Or(V(prog, "y"), And(V(prog, "y"), V(prog, "x"))), prog->vm()));
   prog->ELSE();
-    prog->add(Assign("z", Int(1, 2), prog->vm()));
+    prog->add(Assign("z", Plus(Plus(V(prog, "x"), Int(1, 2)), Int(-1, 2)), prog->vm()));
   prog->ENDIF();
 
 
@@ -26,8 +32,10 @@ int main() {
 
   auto LG = prog->genLogicGraph();
 
+  LG->optimize();
+
   for (int i = 0; i < 5; i++) {
-    LG->iterate();
+    LG->iterate({{"x", 1}, {"y", 2}});
     LG->print_outputs();
   }
 

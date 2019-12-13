@@ -220,7 +220,15 @@ Type ParseNumExpressionVar::type() {
 }
 
 LNP ParseNumExpressionVar::get_node(Program& p) {
-  return p.varNodeMap.at(_v);
+  LNP n = p.varNodeMap.at(_v);
+
+  if (n->ty != NodeType::INPUT
+   && n->ty != NodeType::REG_SRC
+   && n->ty != NodeType::IDENTITY) {
+    ERROR("Using bad var: " + _v);
+  }
+
+  return n;
 }
 
 PNum Int(int i, int size) {
@@ -320,6 +328,7 @@ LNP Program::newNode(NodeType t, int size, int val) {
   n->ty = t;
   n->size = size;
   n->val = val;
+  n->_weight = -1;
   all_nodes.push_back(n);
 
   return n;

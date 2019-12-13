@@ -11,3 +11,15 @@ inline void ERROR(string s) {
 }
 
 typedef string Var;
+
+// template <typename T>
+// const T min(const T& a, const T& b)
+// {
+//    return (b < a) ? b : a;
+// }
+//
+// template <typename T>
+// const T max(const T& a, const T& b)
+// {
+//    return (b > a) ? b : a;
+// }

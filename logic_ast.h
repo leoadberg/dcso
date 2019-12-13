@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <unordered_set>
 
 enum class NodeType {
   IDENTITY,
@@ -17,6 +18,7 @@ enum class NodeType {
   OR,
   XOR,
   MUX,
+  DEAD,
 };
 
 class LogicGraph;
@@ -27,7 +29,7 @@ class LogicNode : public enable_shared_from_this<LogicNode> {
 public:
 
   vector<LNP> inputs;
-  vector<LNP> outputs;
+  unordered_set<LNP> outputs;
   NodeType ty;
   int id;
 
@@ -46,16 +48,21 @@ public:
   // If needed (e.g. in Sub)
   int aux;
 
-  int getVal(LogicGraph* lg, int iteration);
+  float _weight;
+
+  int getVal(LogicGraph* lg);
   void addInput(LNP inp);
   string repr();
+  float weight();
+  bool dead();
+  bool depends(LNP other);
 };
 
 typedef shared_ptr<LogicNode> LNP;
 
 class LogicGraph {
 public:
-  unordered_map<Var, int> inputValues;
+  // unordered_map<Var, int> inputValues;
   vector<LNP> all_nodes;
   vector<LNP> input_nodes;
   vector<LNP> output_nodes;
@@ -63,7 +70,10 @@ public:
   int iter;
 
   void optimize();
-  void iterate();
+  void iterate(unordered_map<Var, int> inputValues = {});
+  void reset();
+
+  void combineNodes(LNP oldNode, LNP newNode);
 
   void print_outputs();
 };
