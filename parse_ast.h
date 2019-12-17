@@ -117,7 +117,7 @@ PNum V(shared_ptr<Program> p, Var v);
 //
 // typedef shared_ptr<ParseBoolExpression> PBool;
 
-PNum EQ(PNum a, PNum b, VarMap vm);
+PNum EQ(PNum a, PNum b);
 
 class Statement {
 public:
@@ -159,6 +159,7 @@ public:
   Program();
   void decl(Var v, VarType vty, int size);
   void add(shared_ptr<Statement> stmt);
+  void add(PNum expr);
   void IF(PNum cond);
   void ELSE();
   void ENDIF();

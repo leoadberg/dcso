@@ -51,6 +51,8 @@ int LogicNode::getVal(LogicGraph* lg) {
       ERROR("Unknown NodeType");
   }
 
+  val = val & ((1 << size) - 1);
+
   setIter = lg->iter;
   return val;
 }
@@ -58,6 +60,7 @@ int LogicNode::getVal(LogicGraph* lg) {
 string LogicNode::repr() {
   switch (ty) {
     case NodeType::IDENTITY:
+    // return "I(" + inputs.at(0)->repr() + ")";
       return inputs.at(0)->repr();
     case NodeType::LIT:
       return to_string(val);

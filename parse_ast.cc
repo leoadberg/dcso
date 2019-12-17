@@ -102,6 +102,10 @@ void Program::add(shared_ptr<Statement> stmt) {
   stmt->addNodes(*this);
 }
 
+void Program::add(PNum expr) {
+  expr->get_node(*this);
+}
+
 void Program::IF(PNum cond) {
   if (cond->type()._size != 1) ERROR("Non-boolean value used as condition");
 
@@ -314,7 +318,7 @@ LNP ParseNumExpressionSubscript::get_node(Program& p) {
   return node;
 }
 
-PNum EQ(PNum a, PNum b, VarMap vm) {
+PNum EQ(PNum a, PNum b) {
   if (!a->type().weak_eq(b->type())) {
     ERROR("Type mismatch in EQ");
   }
